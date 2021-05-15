@@ -1,2 +1,2 @@
 # backend
-Backend portfolio of the project.
+This repository intends that this project serves as a portfolio.
