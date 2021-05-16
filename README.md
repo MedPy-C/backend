@@ -1,5 +1,5 @@
 # Backend
-This repository intends that this project serves as a portfolio.
+This repo serves as a portfolio of a backend project.
 
 ## Backend stack
 1. Django Rest Framework.
