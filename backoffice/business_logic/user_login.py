@@ -8,7 +8,6 @@ class UserLoginLogic():
     def __init__(self):
         self.fields = ['name', 'access_level', 'email', 'phone_number']
 
-
     def create(self, staff_data):
         user_login = staff_data.get('staff_login').lower()
         email = staff_data.get('email').lower()
@@ -22,13 +21,13 @@ class UserLoginLogic():
             access_level = AccessLevel.USER.value
 
         new_user_login = models.UserLogin(user_login=user_login,
-                             name=name,
-                             password=password_encrypted,
-                             email=email,
-                             phone_number=phone_number,
-                             access_level=access_level,
-                             status=Status.ACTIVE.value
-                             )
+                                          name=name,
+                                          password=password_encrypted,
+                                          email=email,
+                                          phone_number=phone_number,
+                                          access_level=access_level,
+                                          status=Status.ACTIVE.value
+                                          )
 
         user_login_saved = models.UserLogin.objects.save(new_user_login)
 

@@ -1,5 +1,6 @@
 import re
 
+from backoffice.utils.constant import AccessLevel
 from backoffice.utils.exceptions import InvalidParameter
 
 
@@ -9,6 +10,7 @@ def body_validator(data, serializer):
         message = body_serialized.errors
         raise InvalidParameter(message)
     return body_serialized.data
+
 
 def password_validator(password):
     if not password:
@@ -24,6 +26,7 @@ def password_validator(password):
             raise InvalidParameter(
                 "invalid password: password must contain at least 1 uppercase, 1 lowercase, 1 number and 1 special character.")
     return password
+
 
 def access_level_validator(access_level):
     if access_level:

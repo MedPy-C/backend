@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backoffice.utils.validator import password_validator
+from backoffice.utils.validator import password_validator, access_level_validator
 
 
 class UserLoginAddSerializer(serializers.Serializer):

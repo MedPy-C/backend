@@ -10,7 +10,8 @@ class UserLoginQuerySet(models.QuerySet):
         return self.get(user_login=user_login, password=password, status=Status.ACTIVE.value)
 
     def get_all(self):
-        return self.filter(status=Status.ACTIVE.value).values('user_login_code', 'user_login', 'name', 'email', 'access_level')
+        return self.filter(status=Status.ACTIVE.value).values('user_login_code', 'user_login', 'name', 'email',
+                                                              'access_level')
 
     def get_by_code(self, code):
         return self.filter(user_login_code=code, status=Status.ACTIVE.value).first()

@@ -11,7 +11,6 @@ from backoffice.utils.validator import body_validator
 
 class UserLoginView(ViewSet):
 
-
     @access_level_required(min_access_level=AllowAny)
     def create(self, request):
         body_validator(request.data, UserLoginAddSerializer)

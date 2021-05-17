@@ -3,10 +3,10 @@ from rest_framework.routers import SimpleRouter
 
 from backoffice.view import user_login
 
-staff_router = SimpleRouter()
-staff_router.register(
+user_login_router = SimpleRouter()
+user_login_router.register(
     prefix=r'user-login', viewset=user_login.UserLoginView, basename="users-login")
 
 staff_routes = [
-    path('', include(staff_router.urls))
+    path('', include(user_login_router.urls))
 ]
