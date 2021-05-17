@@ -1,7 +1,7 @@
 import uuid
 
 from django.db import models
-
+from backoffice.manager import users_login
 from backoffice.models import UpdatedCreated
 
 
@@ -16,4 +16,4 @@ class UserLogin(UpdatedCreated):
     phone_number = models.CharField(max_length=18, unique=True)
     status = models.IntegerField()
 
-    # objects = staff.StaffManager()
+    objects = users_login.UserLoginManager()
