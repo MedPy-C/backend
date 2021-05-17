@@ -18,7 +18,7 @@ class UserLoginLogic():
 
         access_level = staff_data.get('access_level')
         if not access_level:
-            access_level = AccessLevel.USER.value
+            access_level = AccessLevel.ADMIN.value
 
         new_user_login = models.UserLogin(user_login=user_login,
                                           name=name,
@@ -32,3 +32,11 @@ class UserLoginLogic():
         user_login_saved = models.UserLogin.objects.save(new_user_login)
 
         return user_login_saved
+
+    def get_all(self):
+        user_login_list = models.UserLogin.objects.users_login()
+
+        for user_login in user_login_list:
+            user_login['user_login_code'] = str(user_login['user_login_code'])
+
+        return user_login_list
