@@ -18,14 +18,12 @@ def authenticate(login_payload):
         name = user_login.name
 
         status = user_login.status
-        access_level = user_login.access_level
-        token = __generate_jwt_token(access_level, user_login_code, name, status)
+        token = __generate_jwt_token(user_login_code, name, status)
 
         return {
             'token': token,
             'user_login_code': user_login_code,
             'name': name,
-            'access_level': access_level,
         }
     except Exception as error:
         raise error
@@ -51,13 +49,12 @@ def refresh_token(payload):
         raise Exception('Token expired, make the login again')
 
 
-def __generate_jwt_token(access_level, user_login_code, name, status, now=None, *args, expiration_days=3):
+def __generate_jwt_token(user_login_code, name, status, now=None, *args, expiration_days=3):
     if not now:
         now = datetime.datetime.utcnow()
     expiration = datetime.datetime.utcnow() + datetime.timedelta(days=expiration_days)
 
     token_payload = {
-        'access_level': access_level,
         'user_login_code': user_login_code,
         'name': name,
         'status': status,
