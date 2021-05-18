@@ -15,8 +15,8 @@ class LoginViewSet(ViewSet):
 
     def authenticate(self, request):
         login = body_validator(request.data, LoginSerializer)
-        user_login = self.login_logic.authenticate(login)
-        return Response(user_login)
+        username = self.login_logic.authenticate(login)
+        return Response(username)
 
     def refresh_token(self, request):
         payload = body_validator(request.data, LoginRefreshSerializer)

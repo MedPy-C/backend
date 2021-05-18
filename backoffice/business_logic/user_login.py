@@ -6,26 +6,20 @@ from backoffice.utils.encryptor import Encryptor
 class UserLoginLogic():
 
     def __init__(self):
-        self.fields = ['name', 'access_level', 'email', 'phone_number']
+        self.fields = ['name', 'email', 'phone_number']
 
-    def create(self, staff_data):
-        user_login = staff_data.get('staff_login').lower()
-        email = staff_data.get('email').lower()
-        password = staff_data.get('password')
+    def create(self, user_login_data):
+        username = user_login_data.get('username').lower()
+        email = user_login_data.get('email').lower()
+        password = user_login_data.get('password')
         password_encrypted = Encryptor.md5_encryption(password)
-        name = staff_data.get('name')
-        phone_number = staff_data.get('phone_number')
-
-        access_level = staff_data.get('access_level')
-        if not access_level:
-            access_level = AccessLevel.ADMIN.value
-
-        new_user_login = models.UserLogin(user_login=user_login,
+        name = user_login_data.get('name')
+        phone_number = user_login_data.get('phone_number')
+        new_user_login = models.UserLogin(username=username,
                                           name=name,
                                           password=password_encrypted,
                                           email=email,
                                           phone_number=phone_number,
-                                          access_level=access_level,
                                           status=Status.ACTIVE.value
                                           )
 
@@ -34,7 +28,7 @@ class UserLoginLogic():
         return user_login_saved
 
     def get_all(self):
-        user_login_list = models.UserLogin.objects.users_login()
+        user_login_list = models.UserLogin.objects.get_all_users()
 
         for user_login in user_login_list:
             user_login['user_login_code'] = str(user_login['user_login_code'])
