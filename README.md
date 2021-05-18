@@ -15,3 +15,6 @@ if there is no problem with above code, you should be able to go to http://local
 
 ## Roadmap
 For the details of the backend services that it's currently building click [here](https://docs.google.com/document/d/1yhVXQZtBcIwOV528X4v2iDiZGyhlukNx7xtprcbx4hs/edit?usp=sharing)
+
+## Command "make run" not working?
+If that's your case follow this guide to work that out [link](https://www.youtube.com/watch?v=hh-V6el8Oxk)
