@@ -1,4 +1,5 @@
 import re
+import uuid
 
 from backoffice.utils.constant import AccessLevel
 from backoffice.utils.exceptions import InvalidParameter
@@ -36,3 +37,10 @@ def access_level_validator(access_level):
             raise InvalidParameter(
                 "access_level is invalid.")
     return access_level
+
+def uuid_validator(uuid_code):
+    try:
+        uuid.UUID(uuid_code)
+    except ValueError:
+        raise InvalidParameter(
+            "uuid is invalid.")
