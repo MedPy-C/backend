@@ -8,8 +8,7 @@ from backoffice.utils.exceptions import DuplicatedRecord, InvalidOperation
 class MembershipQuerySet(models.QuerySet):
 
     def get_all(self, user_code):
-        return self.filter(user_login_code=user_code, status=Status.ACTIVE.value).values('membership_code', 'name',
-                                                                                         'slug_name', 'about')
+        return self.filter(user=user_code, status=Status.ACTIVE.value)
 
     def get_by_membership_code(self, user_code, membership_code):
         return self.filter(user_login_code=user_code, membership_code=membership_code,

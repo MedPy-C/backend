@@ -25,7 +25,6 @@ class GroupManager(models.Manager):
 
     def save(self, group):
         try:
-
             group.save()
             return group
         except IntegrityError:
