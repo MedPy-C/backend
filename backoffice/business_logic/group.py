@@ -7,8 +7,13 @@ from backoffice.utils.exceptions import EntityNotFound
 
 class GroupLogic():
     """
-    Group bussines logic.
-    Methods for create, list, retrieve, update, and delete group model
+    Group business logic.
+    Methods:
+        create(): create a new group
+        list(): list all of groups that the user it's part of.
+        retrieve(): get a data from a single group
+        update(): update the group
+        delete(): perform a soft delete
     """
 
     def __init__(self):
