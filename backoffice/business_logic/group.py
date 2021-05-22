@@ -6,6 +6,13 @@ from backoffice.utils.exceptions import EntityNotFound
 
 
 class GroupLogic():
+    """
+    The class that manage the logic of the group model
+    Methods:
+        create(): Create a new group.
+        list(): List all groups that the user it's part of.
+        
+    """
     def __init__(self):
         self.fields = ['membership_code', 'group']
 
@@ -36,7 +43,6 @@ class GroupLogic():
             raise EntityNotFound(
                 f'User with code {user_login_code} not found.'
             )
-        # groups = models.Group.objects.get_all_groups(user_login_code)
         groups = models.Membership.objects.get_all_memberships(user_login_code)
         group_list = []
         for group in groups:
