@@ -7,10 +7,21 @@ from backoffice.utils.exceptions import DuplicatedRecord, InvalidOperation
 class GroupQuerySet(models.QuerySet):
 
     def get_all(self, user_code):
-        return self.filter(user_login_code=user_code, status=Status.ACTIVE.value)
+        """
+        get all the group corresponding to the user_code
+        :param user_code: uuid
+        :return: a queryset with data of the group that this user is part of.
+        """
+        return self.filter(membership__user=user_code, status=Status.ACTIVE.value)
 
     def get_by_group_code(self, user_code, group_code):
-        return self.filter(user_login_code=user_code, group_code=group_code, status=Status.ACTIVE.value).first()
+        """
+        get a single group for this particular user
+        :param user_code: uuid
+        :param group_code: uuid
+        :return: a python class of the group model.
+        """
+        return self.filter(membership__user=user_code, membership__group=group_code, status=Status.ACTIVE.value).first()
 
 
 class GroupManager(models.Manager):

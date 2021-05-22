@@ -19,8 +19,11 @@ class GroupView(ViewSet):
         self.group_logic.create(user_login_code, request.data)
         return Response(status=status.HTTP_201_CREATED)
 
-    def retrieve(self):
-        pass
+    def retrieve(self, request, user_login_code, group_code):
+        uuid_validator(user_login_code)
+        uuid_validator(group_code)
+        group = self.group_logic.retrieve(user_login_code, group_code)
+        return Response(group, status=status.HTTP_200_OK)
 
     def delete(self):
         pass
