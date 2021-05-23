@@ -14,14 +14,15 @@ class GroupQuerySet(models.QuerySet):
         """
         return self.filter(membership__user=user_code, status=Status.ACTIVE.value)
 
-    def get_by_group_code(self, user_code, group_code):
+    def get_by_group_slug_name(self, user_code, slug_name):
         """
         get a single group for this particular user
         :param user_code: uuid
         :param group_code: uuid
         :return: a python class of the group model.
         """
-        return self.filter(membership__user=user_code, membership__group=group_code, status=Status.ACTIVE.value).first()
+        return self.filter(membership__user=user_code, membership__group__slug_name=slug_name,
+                           status=Status.ACTIVE.value).first()
 
 
 class GroupManager(models.Manager):
@@ -31,8 +32,8 @@ class GroupManager(models.Manager):
     def get_all_groups(self, user_code):
         return self.get_queryset().get_all(user_code)
 
-    def get_group_by_group_code(self, user_login_code, group_code):
-        return self.get_queryset().get_by_group_code(user_login_code, group_code)
+    def get_group_by_group_slug_name(self, user_login_code, slug_name):
+        return self.get_queryset().get_by_group_slug_name(user_login_code, slug_name)
 
     def save(self, group):
         try:

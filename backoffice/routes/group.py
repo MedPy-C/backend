@@ -7,7 +7,7 @@ group_routes = [
         {'post': 'create',
          'get': 'list'}), name='user_groups'),
 
-    path('user/<str:user_login_code>/group/<str:group_code>/', group.GroupView.as_view(
+    path('user/<str:user_login_code>/group/<str:slug_name>/', group.GroupView.as_view(
         {'get': 'retrieve',
          'put': 'update',
          'delete': 'delete'}), name='user_group'),
