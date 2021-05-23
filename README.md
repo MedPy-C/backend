@@ -18,3 +18,9 @@ For the details of the backend services that it's currently building click [here
 
 ## Command "make run" not working?
 If that's your case follow this guide to work that out [link](https://www.youtube.com/watch?v=hh-V6el8Oxk)
+
+## Starting tools
+This is some of the software that is necessary for the development process.
+git for windows [here](https://gitforwindows.org/)
+docker [here](https://www.docker.com/get-started)
+postman [here](https://www.postman.com/downloads/)
