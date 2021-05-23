@@ -2,7 +2,7 @@ from django.forms import model_to_dict
 
 from backoffice import models
 from backoffice.utils.constant import Status, RoleLevel
-from backoffice.utils.exceptions import EntityNotFound
+from backoffice.utils.exceptions import EntityNotFound, UnAuthorized
 
 
 class GroupLogic():
@@ -58,7 +58,6 @@ class GroupLogic():
                 f'User with code {user_login_code} not found.'
             )
         groups = models.Group.objects.get_all_groups(user_login_code)
-        # groups = models.Membership.objects.get_all_memberships(user_login_code)
         group_list = []
         for group in groups:
             group_list.append(self.__mapped_group(group))
@@ -94,9 +93,17 @@ class GroupLogic():
             raise EntityNotFound(
                 f'Group with code {group_code} not found.'
             )
+        role = models.Membership.objects.get_member_role_by_user_code_group_code(login_user_code, group_code)
+        for x in role:
+            print(x['role'])
+            if x['role'] != RoleLevel.OWNER.value:
+                raise UnAuthorized(
+                    f'User with code {login_user_code} does not have the privileges to perform that action.'
+                )
         group.name = group_data.get('name')
         group.slug_name = group_data.get('slug_name')
         group.about = group_data.get('about')
+        # if is_owner
         group_saved = models.Group.objects.save(group)
         return self.__mapped_group(group_saved)
 
@@ -111,6 +118,13 @@ class GroupLogic():
             raise EntityNotFound(
                 f'Group with code {group_code} not found.'
             )
+        role = models.Membership.objects.get_member_role_by_user_code_group_code(login_user_code, group_code)
+        for x in role:
+            print(x['role'])
+            if x['role'] != RoleLevel.OWNER.value:
+                raise UnAuthorized(
+                    f'User with code {login_user_code} does not have the privileges to perform that action.'
+                )
         models.Group.objects.delete(group)
 
     def __mapped_group_detailed(self, group):
