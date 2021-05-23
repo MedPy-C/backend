@@ -1,6 +1,5 @@
 from django.db import models, IntegrityError
 
-from backoffice.manager import group
 from backoffice.utils.constant import Status
 from backoffice.utils.exceptions import DuplicatedRecord, InvalidOperation
 

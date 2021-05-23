@@ -61,3 +61,10 @@ class DuplicatedRecord(Exception):
         self.status_code = 409
         self.message = message
         super().__init__(self.message)
+
+class UnAuthorized(Exception):
+    def __init__(self, message='UnAuthorized'):
+        self.error_code = ErrorCode.UNAUTHORIZED
+        self.status_code = 402
+        self.message = message
+        super().__init__(self.message)

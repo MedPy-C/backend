@@ -63,11 +63,11 @@ class GroupLogic():
             group_list.append(self.__mapped_group(group))
         return group_list
 
-    def retrieve(self, user_login_code, group_code):
+    def retrieve(self, user_login_code, slug_name):
         """
         retrive only one group,
         :param user_login_code: uuid
-        :param group_code: uuid
+        :param slug_name: slug name of the group
         :return: a dict with data of the selected group.
         """
         user = models.UserLogin.objects.get_user_by_code(user_login_code)
@@ -75,23 +75,23 @@ class GroupLogic():
             raise EntityNotFound(
                 f'User with code {user_login_code} not found.'
             )
-        group = models.Group.objects.get_group_by_group_code(user_login_code, group_code)
+        group = models.Group.objects.get_group_by_group_slug_name(user_login_code, slug_name)
         if not group:
             raise EntityNotFound(
-                f'Group with code {group_code} not found.'
+                f'Group with code {slug_name} not found.'
             )
         return self.__mapped_group_detailed(group)
 
-    def update(self, login_user_code, group_code, group_data):
+    def update(self, login_user_code, slug_name, group_data):
         user = models.UserLogin.objects.get_user_by_code(login_user_code)
         if not user:
             raise EntityNotFound(
                 f'User with code {login_user_code} not found'
             )
-        group = models.Group.objects.get_group_by_group_code(login_user_code, group_code)
+        group = models.Group.objects.get_group_by_group_slug_name(login_user_code, slug_name)
         if not group:
             raise EntityNotFound(
-                f'Group with code {group_code} not found.'
+                f'Group with code {slug_name} not found.'
             )
         role = models.Membership.objects.get_member_role_by_user_code_group_code(login_user_code, group_code)
         for x in role:
