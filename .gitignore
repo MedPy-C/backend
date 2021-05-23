@@ -26,6 +26,7 @@ __pycache__/
 # vscode
 .vscode
 # dev db
+mediapp_be/db.sqlite3
 db.sqlite3
 *.sqlite3
 # Log files
