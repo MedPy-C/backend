@@ -27,5 +27,6 @@ __pycache__/
 .vscode
 # dev db
 db.sqlite3
+*.sqlite3
 # Log files
 *.log
