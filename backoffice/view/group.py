@@ -10,8 +10,12 @@ from backoffice.utils.validator import body_validator, uuid_validator
 class GroupView(ViewSet):
     group_logic = GroupLogic()
 
-    def update(self):
-        pass
+    def update(self, request, user_login_code, group_code):
+        uuid_validator(user_login_code)
+        uuid_validator(group_code)
+        body_validator(request.data, GroupSerializer)
+        updated_group = self.group_logic.update(user_login_code, group_code, request.data)
+        return Response(updated_group, status=status.HTTP_200_OK)
 
     def create(self, request, user_login_code):
         uuid_validator(user_login_code)
@@ -25,8 +29,11 @@ class GroupView(ViewSet):
         group = self.group_logic.retrieve(user_login_code, group_code)
         return Response(group, status=status.HTTP_200_OK)
 
-    def delete(self):
-        pass
+    def delete(self, request, user_login_code, group_code):
+        uuid_validator(user_login_code)
+        uuid_validator(group_code)
+        self.group_logic.delete(user_login_code, group_code)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def list(self, request, user_login_code):
         uuid_validator(user_login_code)

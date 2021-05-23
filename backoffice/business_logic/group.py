@@ -83,6 +83,36 @@ class GroupLogic():
             )
         return self.__mapped_group_detailed(group)
 
+    def update(self, login_user_code, group_code, group_data):
+        user = models.UserLogin.objects.get_user_by_code(login_user_code)
+        if not user:
+            raise EntityNotFound(
+                f'User with code {login_user_code} not found'
+            )
+        group = models.Group.objects.get_group_by_group_code(login_user_code, group_code)
+        if not group:
+            raise EntityNotFound(
+                f'Group with code {group_code} not found.'
+            )
+        group.name = group_data.get('name')
+        group.slug_name = group_data.get('slug_name')
+        group.about = group_data.get('about')
+        group_saved = models.Group.objects.save(group)
+        return self.__mapped_group(group_saved)
+
+    def delete(self, login_user_code, group_code):
+        user = models.UserLogin.objects.get_user_by_code(login_user_code)
+        if not user:
+            raise EntityNotFound(
+                f'User with code {login_user_code} not found'
+            )
+        group = models.Group.objects.get_group_by_group_code(login_user_code, group_code)
+        if not group:
+            raise EntityNotFound(
+                f'Group with code {group_code} not found.'
+            )
+        models.Group.objects.delete(group)
+
     def __mapped_group_detailed(self, group):
         """
         we map from group object to a dict with data of group
