@@ -51,7 +51,7 @@ def slug_name_validator(slug_name):
     if not slug_name:
         raise InvalidParameter("slug_name it's required")
     else:
-        regEx = r"^[a-z0-9-]+(?:-[a-z0-9]+)*$"
+        regEx = r"^[a-z0-9-_]+(?:-[a-z0-9]+)*$"
         pattern = re.compile(regEx)
         match = re.search(pattern, slug_name)
         if not match:

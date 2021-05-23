@@ -91,9 +91,9 @@ class GroupLogic():
         group = models.Group.objects.get_group_by_group_slug_name(login_user_code, slug_name)
         if not group:
             raise EntityNotFound(
-                f'Group with code {slug_name} not found.'
+                f'Group with slug name {slug_name} not found.'
             )
-        role = models.Membership.objects.get_member_role_by_user_code_group_code(login_user_code, group_code)
+        role = models.Membership.objects.get_member_role_by_user_code_group_slug_name(login_user_code, slug_name)
         for x in role:
             print(x['role'])
             if x['role'] != RoleLevel.OWNER.value:
@@ -107,18 +107,18 @@ class GroupLogic():
         group_saved = models.Group.objects.save(group)
         return self.__mapped_group(group_saved)
 
-    def delete(self, login_user_code, group_code):
+    def delete(self, login_user_code, slug_name):
         user = models.UserLogin.objects.get_user_by_code(login_user_code)
         if not user:
             raise EntityNotFound(
                 f'User with code {login_user_code} not found'
             )
-        group = models.Group.objects.get_group_by_group_code(login_user_code, group_code)
+        group = models.Group.objects.get_group_by_group_slug_name(login_user_code, slug_name)
         if not group:
             raise EntityNotFound(
-                f'Group with code {group_code} not found.'
+                f'Group with slug name {slug_name} not found.'
             )
-        role = models.Membership.objects.get_member_role_by_user_code_group_code(login_user_code, group_code)
+        role = models.Membership.objects.get_member_role_by_user_code_group_slug_name(login_user_code, slug_name)
         for x in role:
             print(x['role'])
             if x['role'] != RoleLevel.OWNER.value:

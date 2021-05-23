@@ -29,10 +29,10 @@ class GroupView(ViewSet):
         group = self.group_logic.retrieve(user_login_code, slug_name)
         return Response(group, status=status.HTTP_200_OK)
 
-    def delete(self, request, user_login_code, group_code):
+    def delete(self, request, user_login_code, slug_name):
         uuid_validator(user_login_code)
-        uuid_validator(group_code)
-        self.group_logic.delete(user_login_code, group_code)
+        slug_name_validator(slug_name)
+        self.group_logic.delete(user_login_code, slug_name)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def list(self, request, user_login_code):

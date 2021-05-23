@@ -13,6 +13,9 @@ class MembershipQuerySet(models.QuerySet):
         return self.filter(user_login_code=user_code, membership_code=membership_code,
                            status=Status.ACTIVE.value).first()
 
+    def get_nole_by_user_code_slug_name(self, user_code, slug_name):
+        return self.filter(user=user_code, group__slug_name=slug_name, status=Status.ACTIVE.value).values('role')
+
 
 class MembershipManager(models.Manager):
     def get_queryset(self):
@@ -23,6 +26,9 @@ class MembershipManager(models.Manager):
 
     def get_membership_by_membership_code(self, user_login_code, membership_code):
         return self.get_queryset().get_by_membership_code(user_login_code, membership_code)
+
+    def get_member_role_by_user_code_group_slug_name(self, user_login_code, slug_name):
+        return self.get_queryset().get_nole_by_user_code_slug_name(user_login_code, slug_name)
 
     def save(self, membership):
         try:
