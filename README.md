@@ -21,6 +21,6 @@ If that's your case follow this guide to work that out [link](https://www.youtub
 
 ## Starting tools
 This is some of the software that is necessary for the development process.
-git for windows [here](https://gitforwindows.org/)
-docker [here](https://www.docker.com/get-started)
-postman [here](https://www.postman.com/downloads/)
+1. git for windows [here](https://gitforwindows.org/)
+2. docker [here](https://www.docker.com/get-started)
+3. postman [here](https://www.postman.com/downloads/)
