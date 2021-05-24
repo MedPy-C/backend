@@ -15,7 +15,7 @@ class Group(UpdatedCreated):
     is_verified = models.BooleanField(default=False)
     is_public = models.BooleanField(default=True)
     is_limited = models.BooleanField(default=True)
-    members_limit = models.PositiveIntegerField(default=20)
+    members_limit = models.PositiveIntegerField(default=5)
     status = models.IntegerField()
 
     objects = group.GroupManager()

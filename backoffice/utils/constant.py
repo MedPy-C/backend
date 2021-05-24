@@ -15,3 +15,6 @@ class Status(Enum):
 class AccessLevel(Enum):
     ADMIN = 0
     USER = 1
+
+class URL():
+    ACTIVATION = '/backoffice/invitation/activate/'
