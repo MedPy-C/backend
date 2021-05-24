@@ -18,11 +18,14 @@ class GroupQuerySet(models.QuerySet):
         """
         get a single group for this particular user
         :param user_code: uuid
-        :param group_code: uuid
+        :param slug_name: slug name of the group
         :return: a python class of the group model.
         """
         return self.filter(membership__user=user_code, membership__group__slug_name=slug_name,
                            status=Status.ACTIVE.value).first()
+
+    def get_by_group_code(self, group_code):
+        return self.filter(group_code=group_code, status=Status.ACTIVE.value).first()
 
 
 class GroupManager(models.Manager):
@@ -35,6 +38,9 @@ class GroupManager(models.Manager):
     def get_group_by_group_slug_name(self, user_login_code, slug_name):
         return self.get_queryset().get_by_group_slug_name(user_login_code, slug_name)
 
+    def get_group_by_group_code(self, group_code):
+        return self.get_queryset().get_by_group_code(group_code)
+
     def save(self, group):
         try:
             group.save()
@@ -43,11 +49,11 @@ class GroupManager(models.Manager):
             raise DuplicatedRecord()
         except Exception as ex:
             raise InvalidOperation(
-                f"Error while trying to save user \n Error Message:{ex}")
+                f"Error while trying to save group \n Error Message:{ex}")
 
     def delete(self, group):
         try:
             group.status = Status.INACTIVE.value
             group.save()
         except Exception as ex:
-            raise InvalidOperation(f"Error while trying to delete user, \n Error Message: {ex}")
+            raise InvalidOperation(f"Error while trying to delete group, \n Error Message: {ex}")

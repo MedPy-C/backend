@@ -5,6 +5,8 @@ class ErrorCode:
     NOT_FOUND = 3
     UNEXPECTED = 4
     DUPLICATED = 5
+    USED_INVITATION = 6
+    MEMBERS_EXCEEDED = 7
 
 
 class InvalidParameter(Exception):
@@ -65,6 +67,20 @@ class DuplicatedRecord(Exception):
 class UnAuthorized(Exception):
     def __init__(self, message='UnAuthorized'):
         self.error_code = ErrorCode.UNAUTHORIZED
-        self.status_code = 402
+        self.status_code = 403
+        self.message = message
+        super().__init__(self.message)
+
+class UsedInvitation(Exception):
+    def __init__(self, message='Invitation has been used'):
+        self.error_code = ErrorCode.USED_INVITATION
+        self.status_code = 403
+        self.message = message
+        super().__init__(self.message)
+
+class MembersLimitExceeded(Exception):
+    def __init__(self, message='Members limit exceeded'):
+        self.error_code = ErrorCode.MEMBERS_EXCEEDED
+        self.status_code = 401
         self.message = message
         super().__init__(self.message)
