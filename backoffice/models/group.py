@@ -11,7 +11,7 @@ class Group(UpdatedCreated):
     name = models.CharField(max_length=200)
     slug_name = models.SlugField(max_length=40, unique=True)
     about = models.TextField()
-    members = models.ManyToManyField(UserLogin, through="Membership", through_fields=('groups', 'user'))
+    members = models.ManyToManyField(UserLogin, through="Membership", through_fields=('group', 'user'))
     is_verified = models.BooleanField(default=False)
     is_public = models.BooleanField(default=True)
     is_limited = models.BooleanField(default=True)
