@@ -9,10 +9,10 @@ class GroupLogic():
     """
     Group business logic.
     Methods:
-        create(): create a new groups
-        list(): list all of groups that the user it's part of.
-        retrieve(): get a data from a single groups
-        update(): update the groups
+        create(): create a new group
+        list(): list all of group that the user it's part of.
+        retrieve(): get a data from a single group
+        update(): update the group
         delete(): perform a soft delete
     """
 
@@ -21,9 +21,9 @@ class GroupLogic():
 
     def create(self, user_login_code, group_data):
         """
-        create function of groups model
+        create function of group model
         :param user_login_code: uuid
-        :param group_data: serialized data of groups
+        :param group_data: serialized data of group
         :return: if no errors present does not raise exceptions.
         """
         user = models.UserLogin.objects.get_user_by_code(user_login_code)
@@ -48,9 +48,9 @@ class GroupLogic():
 
     def list(self, user_login_code):
         """
-        list user groups by user code
+        list user group by user code
         :param user_login_code: uuid
-        :return: a list of dict with data of the groups that the user it is part of.
+        :return: a list of dict with data of the group that the user it is part of.
         """
         user = models.UserLogin.objects.get_user_by_code(user_login_code)
         if not user:
@@ -65,10 +65,10 @@ class GroupLogic():
 
     def retrieve(self, user_login_code, slug_name):
         """
-        retrive only one groups,
+        retrive only one group,
         :param user_login_code: uuid
-        :param slug_name: slug name of the groups
-        :return: a dict with data of the selected groups.
+        :param slug_name: slug name of the group
+        :return: a dict with data of the selected group.
         """
         user = models.UserLogin.objects.get_user_by_code(user_login_code)
         if not user:
@@ -129,9 +129,9 @@ class GroupLogic():
 
     def __mapped_group_detailed(self, group):
         """
-        we map from groups object to a dict with data of groups
+        we map from group object to a dict with data of group
         :param group: python class object
-        :return: dict with more detailed data of groups.
+        :return: dict with more detailed data of group.
         """
         group_dict = model_to_dict(group, fields=self.fields)
         group_dict['group_code'] = str(group.group_code)
@@ -142,9 +142,9 @@ class GroupLogic():
 
     def __mapped_group(self, group):
         """
-        we map from groups object to a dict with data of groups
+        we map from group object to a dict with data of group
         :param group: python class object
-        :return: dict with data of groups.
+        :return: dict with data of group.
         """
         group_dict = model_to_dict(group, fields=self.fields)
         group_dict['group_code'] = str(group.group_code)
