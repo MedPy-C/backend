@@ -2,9 +2,9 @@
 # from rest_framework.test import APITestCase
 #
 # from backoffice.business_logic.user_login import UserLoginLogic
-# from backoffice.tests.helper.authorization_helper import http_authorization_setup_by_current_user
-# from backoffice.tests.mock.group import group_payload
-# from backoffice.tests.mock.user_login import owner_user_login
+# from backoffice.test.helper.authorization_helper import http_authorization_setup_by_current_user
+# from backoffice.test.mock.group import group_payload
+# from backoffice.test.mock.user_login import owner_user_login
 #
 #
 # class CreateGroupTest(APITestCase):
