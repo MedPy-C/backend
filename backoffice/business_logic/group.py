@@ -10,7 +10,7 @@ class GroupLogic():
     Group business logic.
     Methods:
         create(): create a new group
-        list(): list all of groups that the user it's part of.
+        list(): list all of group that the user it's part of.
         retrieve(): get a data from a single group
         update(): update the group
         delete(): perform a soft delete

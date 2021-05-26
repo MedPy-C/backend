@@ -10,7 +10,4 @@ invitation_routes = [
         {'get': 'list'}), name='user_invitations'),
     path('invitation/activate/<str:invitation_code>/', invitation.InvitationView.as_view(
         {'post': 'activate'}), name='activate_invitation')
-    #      'put': 'update',
-    #      'delete': 'delete'}), name='user_invitation'),
-
 ]
