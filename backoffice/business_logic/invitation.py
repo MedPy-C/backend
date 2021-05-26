@@ -10,9 +10,9 @@ from backoffice.utils.exceptions import EntityNotFound, UnAuthorized, UsedInvita
 class InvitationLogic():
     """
     This manage the invitation logic
-    def create(): Create a new invitation, with user_login_code and the slug_name of the groups to be invited with
+    def create(): Create a new invitation, with user_login_code and the slug_name of the group to be invited with
     def list(): list all the invitations using user_code and slug_name and
-    def activate(): activate the invitation, check members_limit and if the user it is part of the groups already.
+    def activate(): activate the invitation, check members_limit and if the user it is part of the group already.
     """
 
     def __init__(self):
@@ -38,7 +38,7 @@ class InvitationLogic():
         if membership.remaining_invitations == 0 or membership.status == 0 or membership.role == 1 or \
                 membership.group.members_limit < members_quantity:
             raise UnAuthorized(
-                'You do not have remaining invitations or the privilege to invite or the groups it is full')
+                'You do not have remaining invitations or the privilege to invite or the group it is full')
         new_invitation = models.Invitation.objecs.save(invitation)
         membership.remaining_invitations -= 1
         models.Membership.objects.save(membership)
@@ -108,20 +108,20 @@ class InvitationLogic():
         new_membership.role = RoleLevel.USER.value
         new_membership.status = Status.ACTIVE.value
         # Check member limits and if there is a duplicate member
-        member_limit = models.Membership.objects.get_membership_count_by_group_slug_name(invitation_dict['groups'])
+        member_limit = models.Membership.objects.get_membership_count_by_group_slug_name(invitation_dict['group'])
         if member_limit >= group.members_limit:
             raise MembersLimitExceeded('Members limit exceeded.')
         already_member = models.Membership.objects.get_membership_by_user_code_group_code(user_login_code,
                                                                                           invitation_dict['group_code'])
         if already_member:
-            raise DuplicatedRecord('You already belong to this groups.')
+            raise DuplicatedRecord('You already belong to this group.')
         # Add new member
         member_added = models.Membership.objects.save(new_membership)
         return self.__mapped_membership(member_added)
 
     def __mapped_invitation(self, invitation):
         invitation_dict = model_to_dict(invitation, fields=self.fields)
-        invitation_dict['groups'] = str(invitation.group.slug_name)
+        invitation_dict['group'] = str(invitation.group.slug_name)
         invitation_dict['group_code'] = str(invitation.group.group_code)
         invitation_dict['issued_by'] = str(invitation.issued_by.user_login_code)
         return invitation_dict
@@ -129,7 +129,7 @@ class InvitationLogic():
     def __mapped_detailed_invitation(self, invitation):
         invitation_dict = model_to_dict(invitation, fields=self.fields)
         invitation_dict['invitation_code'] = str(invitation.invitation_code)
-        invitation_dict['groups'] = str(invitation.group.slug_name)
+        invitation_dict['group'] = str(invitation.group.slug_name)
         invitation_dict['group_code'] = str(invitation.group.group_code)
         invitation_dict['issued_by'] = str(invitation.issued_by.name)
         invitation_dict['used_by'] = None if invitation.used_by == None else str(invitation.used_by.name)
@@ -141,6 +141,6 @@ class InvitationLogic():
         member_dict['membership_code'] = str(member.membership_code)
         member_dict['role'] = str(RoleLevel(member.role))
         member_dict['invited_by'] = str(member.invited_by.name)
-        member_dict['groups'] = str(member.group.slug_name)
+        member_dict['group'] = str(member.group.slug_name)
         member_dict['status'] = str(Status(member.status))
         return member_dict

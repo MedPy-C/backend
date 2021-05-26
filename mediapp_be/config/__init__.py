@@ -7,10 +7,11 @@ from .development import Development
 # from .test import Test
 
 def get_configs(enviroment=None):
+    from mediapp_be.config.test import Test
     configs = {
         'dev': Development,
         # 'prd': Production,
-        # 'test': Test
+        'test': Test
     }
     if not enviroment:
         enviroment = os.environ.get('MEDIAPP_BE_API_ENV', 'dev')
