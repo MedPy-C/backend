@@ -7,6 +7,7 @@ class ErrorCode:
     DUPLICATED = 5
     USED_INVITATION = 6
     MEMBERS_EXCEEDED = 7
+    NOT_THE_OWNER = 8
 
 
 class InvalidParameter(Exception):
@@ -82,5 +83,12 @@ class MembersLimitExceeded(Exception):
     def __init__(self, message='Members limit exceeded'):
         self.error_code = ErrorCode.MEMBERS_EXCEEDED
         self.status_code = 401
+        self.message = message
+        super().__init__(self.message)
+
+class IsNotOwner(Exception):
+    def __init__(self, message='You are not the owner'):
+        self.error_code = ErrorCode.NOT_THE_OWNER
+        self.status_code = 403
         self.message = message
         super().__init__(self.message)

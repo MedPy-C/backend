@@ -20,22 +20,22 @@ class GroupView(ViewSet):
     def create(self, request, user_login_code):
         uuid_validator(user_login_code)
         body_validator(request.data, GroupSerializer)
-        self.group_logic.create(user_login_code, request.data)
+        self.group_logic.create(request, user_login_code, request.data)
         return Response(status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, user_login_code, slug_name):
         uuid_validator(user_login_code)
         slug_name_validator(slug_name)
-        group = self.group_logic.retrieve(user_login_code, slug_name)
+        group = self.group_logic.retrieve(request, user_login_code, slug_name)
         return Response(group, status=status.HTTP_200_OK)
 
     def delete(self, request, user_login_code, slug_name):
         uuid_validator(user_login_code)
         slug_name_validator(slug_name)
-        self.group_logic.delete(user_login_code, slug_name)
+        self.group_logic.delete(request, user_login_code, slug_name)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def list(self, request, user_login_code):
         uuid_validator(user_login_code)
-        group_list = self.group_logic.list(user_login_code)
+        group_list = self.group_logic.list(request, user_login_code)
         return Response(group_list, status=status.HTTP_200_OK)

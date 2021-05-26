@@ -2,7 +2,7 @@ from django.forms import model_to_dict
 
 from backoffice import models
 from backoffice.utils.constant import Status, RoleLevel
-from backoffice.utils.exceptions import EntityNotFound, UnAuthorized
+from backoffice.utils.exceptions import EntityNotFound, UnAuthorized, IsNotOwner
 
 
 class GroupLogic():
@@ -19,113 +19,128 @@ class GroupLogic():
     def __init__(self):
         self.fields = ['name', 'slug_name', 'about']
 
-    def create(self, user_login_code, group_data):
+    def create(self, request, user_login_code, group_data):
         """
         create function of group model
         :param user_login_code: uuid
         :param group_data: serialized data of group
         :return: if no errors present does not raise exceptions.
         """
-        user = models.UserLogin.objects.get_user_by_code(user_login_code)
-        if not user:
-            raise EntityNotFound(
-                f'User with code {user_login_code} not found'
-            )
-        group_model = models.Group()
-        membership_model = models.Membership()
+        if request.user.get('user_login_code') == user_login_code:
+            user = models.UserLogin.objects.get_user_by_code(user_login_code)
+            if not user:
+                raise EntityNotFound(
+                    f'User with code {user_login_code} not found'
+                )
+            group_model = models.Group()
+            membership_model = models.Membership()
 
-        group_model.name = group_data.get('name')
-        group_model.slug_name = group_data.get('slug_name')
-        group_model.about = group_data.get('about')
-        group_model.status = Status.ACTIVE.value
-        saved_group = models.Group.objects.save(group_model)
+            group_model.name = group_data.get('name')
+            group_model.slug_name = group_data.get('slug_name')
+            group_model.about = group_data.get('about')
+            group_model.status = Status.ACTIVE.value
+            saved_group = models.Group.objects.save(group_model)
 
-        membership_model.group = saved_group
-        membership_model.status = Status.ACTIVE.value
-        membership_model.role = RoleLevel.OWNER.value
-        membership_model.user = user
-        saved_membership = models.Membership.objects.save(membership_model)
+            membership_model.group = saved_group
+            membership_model.status = Status.ACTIVE.value
+            membership_model.role = RoleLevel.OWNER.value
+            membership_model.user = user
+            saved_membership = models.Membership.objects.save(membership_model)
+        else:
+            raise IsNotOwner('You are not the owner of that resource.')
 
-    def list(self, user_login_code):
+    def list(self, request, user_login_code):
         """
         list user group by user code
         :param user_login_code: uuid
         :return: a list of dict with data of the group that the user it is part of.
         """
-        user = models.UserLogin.objects.get_user_by_code(user_login_code)
-        if not user:
-            raise EntityNotFound(
-                f'User with code {user_login_code} not found.'
-            )
-        groups = models.Group.objects.get_all_groups(user_login_code)
-        group_list = []
-        for group in groups:
-            group_list.append(self.__mapped_group(group))
-        return group_list
+        if request.user.get('user_login_code') == user_login_code:
+            user = models.UserLogin.objects.get_user_by_code(user_login_code)
+            if not user:
+                raise EntityNotFound(
+                    f'User with code {user_login_code} not found.'
+                )
+            groups = models.Group.objects.get_all_groups(user_login_code)
+            group_list = []
+            for group in groups:
+                group_list.append(self.__mapped_group(group))
+            return group_list
+        else:
+            raise IsNotOwner('You are not the owner of that resource.')
 
-    def retrieve(self, user_login_code, slug_name):
+    def retrieve(self, request, user_login_code, slug_name):
         """
         retrive only one group,
         :param user_login_code: uuid
         :param slug_name: slug name of the group
         :return: a dict with data of the selected group.
         """
-        user = models.UserLogin.objects.get_user_by_code(user_login_code)
-        if not user:
-            raise EntityNotFound(
-                f'User with code {user_login_code} not found.'
-            )
-        group = models.Group.objects.get_group_by_group_slug_name(user_login_code, slug_name)
-        if not group:
-            raise EntityNotFound(
-                f'Group with code {slug_name} not found.'
-            )
-        return self.__mapped_group_detailed(group)
-
-    def update(self, login_user_code, slug_name, group_data):
-        user = models.UserLogin.objects.get_user_by_code(login_user_code)
-        if not user:
-            raise EntityNotFound(
-                f'User with code {login_user_code} not found'
-            )
-        group = models.Group.objects.get_group_by_group_slug_name(login_user_code, slug_name)
-        if not group:
-            raise EntityNotFound(
-                f'Group with slug name {slug_name} not found.'
-            )
-        role = models.Membership.objects.get_member_role_by_user_code_group_slug_name(login_user_code, slug_name)
-        for x in role:
-            print(x['role'])
-            if x['role'] != RoleLevel.OWNER.value:
-                raise UnAuthorized(
-                    f'User with code {login_user_code} does not have the privileges to perform that action.'
+        if request.user.get('user_login_code') == user_login_code:
+            user = models.UserLogin.objects.get_user_by_code(user_login_code)
+            if not user:
+                raise EntityNotFound(
+                    f'User with code {user_login_code} not found.'
                 )
-        group.name = group_data.get('name')
-        group.slug_name = group_data.get('slug_name')
-        group.about = group_data.get('about')
-        # if is_owner
-        group_saved = models.Group.objects.save(group)
-        return self.__mapped_group(group_saved)
-
-    def delete(self, login_user_code, slug_name):
-        user = models.UserLogin.objects.get_user_by_code(login_user_code)
-        if not user:
-            raise EntityNotFound(
-                f'User with code {login_user_code} not found'
-            )
-        group = models.Group.objects.get_group_by_group_slug_name(login_user_code, slug_name)
-        if not group:
-            raise EntityNotFound(
-                f'Group with slug name {slug_name} not found.'
-            )
-        role = models.Membership.objects.get_member_role_by_user_code_group_slug_name(login_user_code, slug_name)
-        for x in role:
-            print(x['role'])
-            if x['role'] != RoleLevel.OWNER.value:
-                raise UnAuthorized(
-                    f'User with code {login_user_code} does not have the privileges to perform that action.'
+            group = models.Group.objects.get_group_by_group_slug_name(user_login_code, slug_name)
+            if not group:
+                raise EntityNotFound(
+                    f'Group with code {slug_name} not found.'
                 )
-        models.Group.objects.delete(group)
+            return self.__mapped_group_detailed(group)
+        else:
+            raise IsNotOwner('You are not the owner of that resource.')
+
+    def update(self, request, login_user_code, slug_name, group_data):
+        if request.user.get('user_login_code') == login_user_code:
+            user = models.UserLogin.objects.get_user_by_code(login_user_code)
+            if not user:
+                raise EntityNotFound(
+                    f'User with code {login_user_code} not found'
+                )
+            group = models.Group.objects.get_group_by_group_slug_name(login_user_code, slug_name)
+            if not group:
+                raise EntityNotFound(
+                    f'Group with slug name {slug_name} not found.'
+                )
+            role = models.Membership.objects.get_member_role_by_user_code_group_slug_name(login_user_code, slug_name)
+            for x in role:
+                print(x['role'])
+                if x['role'] != RoleLevel.OWNER.value:
+                    raise UnAuthorized(
+                        f'User with code {login_user_code} does not have the privileges to perform that action.'
+                    )
+            group.name = group_data.get('name')
+            group.slug_name = group_data.get('slug_name')
+            group.about = group_data.get('about')
+            # if is_owner
+            group_saved = models.Group.objects.save(group)
+            return self.__mapped_group(group_saved)
+        else:
+            raise IsNotOwner('You are not the owner of that resource.')
+
+    def delete(self, request, login_user_code, slug_name):
+        if request.user.get('user_login_code') == login_user_code:
+            user = models.UserLogin.objects.get_user_by_code(login_user_code)
+            if not user:
+                raise EntityNotFound(
+                    f'User with code {login_user_code} not found'
+                )
+            group = models.Group.objects.get_group_by_group_slug_name(login_user_code, slug_name)
+            if not group:
+                raise EntityNotFound(
+                    f'Group with slug name {slug_name} not found.'
+                )
+            role = models.Membership.objects.get_member_role_by_user_code_group_slug_name(login_user_code, slug_name)
+            for x in role:
+                print(x['role'])
+                if x['role'] != RoleLevel.OWNER.value:
+                    raise UnAuthorized(
+                        f'User with code {login_user_code} does not have the privileges to perform that action.'
+                    )
+            models.Group.objects.delete(group)
+        else:
+            raise IsNotOwner('You are not the owner of that resource.')
 
     def __mapped_group_detailed(self, group):
         """
