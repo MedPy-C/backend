@@ -25,6 +25,9 @@ class MembershipQuerySet(models.QuerySet):
     def get_membership_count(self, slug_name):
         return self.filter(group__slug_name=slug_name).count()
 
+    def get_all_members(self, slug_name):
+        return self.filter(group__slug_name=slug_name, status=Status.ACTIVE.value)
+
 
 class MembershipManager(models.Manager):
     def get_queryset(self):
@@ -47,6 +50,9 @@ class MembershipManager(models.Manager):
 
     def get_membership_by_user_code_group_code(self, user_code, group_code):
         return self.get_queryset().get_membership_by_user_code_group_code(user_code, group_code)
+
+    def get_all_members_by_slug_name(self, slug_name):
+        return self.get_queryset().get_all_members(slug_name)
 
     def save(self, membership):
         try:
