@@ -1,16 +1,18 @@
 from functools import wraps
-from .exceptions import StaffNotAllowed
+from .exceptions import IsNotOwner
 
 
-def access_level_required(min_access_level):
-    def decorator_access_level(func):
+def check_ownership():
+    def decorator_check_ownership(func):
         @wraps(func)
         def wrapper(self, request, *args, **kwargs):
-            token_user = request.user
-            if token_user.get('access_level') < min_access_level:
-                raise StaffNotAllowed('Staff is not allowed to create a new Staff')
+            user_login_code = str(request.user.get('user_login_code'))
+            user_login_code_url = str(kwargs.get('user_login_code'))
+            if user_login_code != user_login_code_url:
+                raise IsNotOwner(
+                    'The user does not have the permissions')
             return func(self, request, *args, **kwargs)
 
         return wrapper
 
-    return decorator_access_level
+    return decorator_check_ownership
