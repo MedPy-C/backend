@@ -34,8 +34,8 @@ class TokenExpired(Exception):
         super().__init__(self.message)
 
 
-class StaffNotAllowed(Exception):
-    def __init__(self, message='Staff is not allowed'):
+class UserNotAllowed(Exception):
+    def __init__(self, message='The User is not allowed'):
         self.error_code = ErrorCode.UNAUTHORIZED
         self.status_code = 403
         self.message = message
