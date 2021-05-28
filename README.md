@@ -1,6 +1,13 @@
 # Backend
 This repo serves as a portfolio of a backend project (work in progress...).
 
+## Want to join us?
+Do you want to contribute to this project?
+Are you a junior frontend looking to create a project for your portfolio?
+Maybe we can work together and generate teamwork experience.
+Any framework will work, we just need to be able to connect the backend (REST API) with an interface.
+Need more information? drop me a line [here](https://www.linkedin.com/in/christian-medina-174590193).
+
 ## Backend stack
 1. Django Rest Framework.
 2. Postgresql.
