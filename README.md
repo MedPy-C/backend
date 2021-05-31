@@ -20,7 +20,7 @@ Need more information? drop me a line [here](https://www.linkedin.com/in/christi
 4. execute "make build"
 if there is no problem with above code, you should be able to go to http://localhost:8000/ and be see the wellcome page.
 
-## changelog
+## Changelog
 For the details of the backend services that it's currently building click [here](https://docs.google.com/document/d/1yhVXQZtBcIwOV528X4v2iDiZGyhlukNx7xtprcbx4hs/edit?usp=sharing)
 
 ## Command "make run" not working?
